@@ -26,7 +26,7 @@ A clear and concise description of what you expected to happen.
 - Java Version [e.g. 1.8.0_181 or Corretto-11.0.3.7.1]
 - Kotlin Version [e.g. 1.4.21]
 - Maven Version [e.g. 3.6.1]
-- Gradle Version [e.g. 6.8]
+- Gradle Version [e.g. 7.2]
 - Toolkit Version [e.g. 1.1.0 or git commit hash]
 
 **Additional context**
