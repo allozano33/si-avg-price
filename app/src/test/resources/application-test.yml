@@ -1,0 +1,9 @@
+api:
+  internal:
+    base-uri: http://localhost:9999
+    client-id: 572157570249568
+
+
+fury-lock:
+  ttl_seconds: 1
+  namespace: "sap-feed-test"

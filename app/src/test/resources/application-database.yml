@@ -1,0 +1,11 @@
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///siavpridev;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: root
+    password: 123456
+
+logging:
+  level:
+    org:
+      springframework:
+        r2dbc: DEBUG
