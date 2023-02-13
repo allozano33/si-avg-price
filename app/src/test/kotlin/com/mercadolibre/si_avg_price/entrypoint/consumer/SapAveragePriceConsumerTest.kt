@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolibre.lockclient.Lock
 import com.mercadolibre.si_avg_price.config.IntegrationTest
 import com.mercadolibre.si_avg_price.entrypoint.filter.EntryPointFilter
+import com.mercadolibre.si_avg_price.entrypoint.handler.NewRelicErrorHandler
 import com.mercadolibre.si_avg_price.entrypoint.resource.BQMessage
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input.SapInput
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
@@ -20,6 +21,7 @@ import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.test.mock.mockito.MockBean
 
 @WebFluxTest(SapAveragePriceConsumer::class)
 internal class SapAveragePriceConsumerTest : IntegrationTest() {
@@ -35,6 +37,9 @@ internal class SapAveragePriceConsumerTest : IntegrationTest() {
 
     @MockkBean
     private lateinit var lockService: LockService
+
+    @MockBean
+    lateinit var newRelicErrorHandler: NewRelicErrorHandler
 
     @MockK
     private lateinit var lock: Lock

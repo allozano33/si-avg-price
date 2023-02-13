@@ -2,6 +2,7 @@ package com.mercadolibre.si_avg_price.controller
 
 import com.mercadolibre.si_avg_price.config.IntegrationTest
 import com.mercadolibre.si_avg_price.entrypoint.controller.AveragePriceController
+import com.mercadolibre.si_avg_price.entrypoint.handler.NewRelicErrorHandler
 import com.mercadolibre.si_avg_price.facade.ProcessAveragePriceFacade
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
 import com.mercadolibre.si_avg_price.utils.loadJsonAsString
@@ -9,12 +10,16 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.test.mock.mockito.MockBean
 
 @WebFluxTest(AveragePriceController::class)
 class AveragePriceControllerTest : IntegrationTest() {
 
     @MockkBean
     private lateinit var processAveragePriceFacade: ProcessAveragePriceFacade
+
+    @MockBean
+    lateinit var newRelicErrorHandler: NewRelicErrorHandler
 
 
     @Test

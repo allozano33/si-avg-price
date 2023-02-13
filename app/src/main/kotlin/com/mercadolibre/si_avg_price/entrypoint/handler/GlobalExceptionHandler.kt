@@ -1,17 +1,17 @@
 package com.mercadolibre.si_avg_price.entrypoint.handler
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.handler.DefaultErrorOutput
-import com.mercadolibre.si_avg_price.exception.AlreadyExecutedException
-import com.mercadolibre.si_avg_price.exception.BusinessException
-import com.mercadolibre.si_avg_price.exception.ImplementationNotExistException
+import com.mercadolibre.si_avg_price.exception.AlreadyLockedException
 import com.mercadolibre.si_avg_price.exception.IntegrationClientErrorException
 import com.mercadolibre.si_avg_price.exception.IntegrationServerErrorException
+import com.mercadolibre.si_avg_price.exception.NotFoundLockedException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
@@ -19,14 +19,19 @@ import org.springframework.web.server.ServerWebInputException
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class GlobalExceptionHandler {
+class GlobalExceptionHandler(
+    private val newRelicErrorHandler: NewRelicErrorHandler
+) {
 
     @ResponseBody
     @ExceptionHandler(IntegrationClientErrorException::class)
     fun handleIntegrationClientErrorException(
-        exception: IntegrationClientErrorException
+        exception: IntegrationClientErrorException,
+        request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
         logger.error(exception.message, exception)
+
+        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .unprocessableEntity()
@@ -36,10 +41,13 @@ class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(IntegrationServerErrorException::class)
     fun handleIntegrationServerErrorException(
-        exception: IntegrationServerErrorException
+        exception: IntegrationServerErrorException,
+        request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
         logger.error(exception.message, exception)
+
+        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .internalServerError()
@@ -47,104 +55,69 @@ class GlobalExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(ServerWebInputException::class)
-    fun handleServerWebInputException(
-        exception: ServerWebInputException
+    @ExceptionHandler(AlreadyLockedException::class)
+    fun handleAlreadyLockedException(
+        exception: AlreadyLockedException,
+        request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
         logger.error(exception.message, exception)
 
-        return ResponseEntity
-            .unprocessableEntity()
-            .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
-    }
-
-    @ResponseBody
-    @ExceptionHandler(ImplementationNotExistException::class)
-    fun handleImplementationNotExistException(
-        exception: ImplementationNotExistException
-    ): ResponseEntity<DefaultErrorOutput> {
-
-        logger.error(exception.message, exception)
-
-        return ResponseEntity
-            .unprocessableEntity()
-            .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
-    }
-
-    @ResponseBody
-    @ExceptionHandler(AlreadyExecutedException::class)
-    fun handleAlreadyExecutedException(
-        exception: AlreadyExecutedException
-    ): ResponseEntity<DefaultErrorOutput> {
-
-        logger.error(exception.message, exception)
+        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .ok()
             .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
     }
 
-
     @ResponseBody
-    @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(
-        exception: BusinessException
+    @ExceptionHandler(NotFoundLockedException::class)
+    fun handleNotFoundLockedException(
+        exception: NotFoundLockedException,
+        request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
+
         logger.error(exception.message, exception)
 
-        if (exception.shouldRetry) {
-            return ResponseEntity
-                .badRequest()
-                .body(
-                    DefaultErrorOutput(
-                        message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
-                        errorCode = exception.code
-                    )
-                )
-        } else {
-            return ResponseEntity
-                .ok()
-                .body(
-                    DefaultErrorOutput(
-                        message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
-                        errorCode = exception.code
-                    )
-                )
-        }
+        newRelicErrorHandler.handle(request, exception)
+
+        return ResponseEntity
+            .ok()
+            .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ServerWebInputException::class)
+    fun handleServerWebInputException(
+        exception: ServerWebInputException,
+        request: ServerHttpRequest
+    ): ResponseEntity<DefaultErrorOutput> {
+
+        logger.error(exception.message, exception)
+
+        newRelicErrorHandler.handle(request, exception)
+
+        return ResponseEntity
+            .unprocessableEntity()
+            .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
     }
 
     @ResponseBody
     @ExceptionHandler(Exception::class)
     fun handleException(
-        exception: Exception
+        exception: Exception,
+        request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
         logger.error("occurred an error not expected ", exception)
+
+        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .internalServerError()
             .body(
                 DefaultErrorOutput(
                     message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
-                    errorCode = DEFAULT_ERROR_CODE
-                )
-            )
-    }
-
-    @ResponseBody
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(
-        exception: IllegalArgumentException
-    ): ResponseEntity<DefaultErrorOutput> {
-
-        logger.error(exception.message, exception)
-
-        return ResponseEntity
-            .unprocessableEntity()
-            .body(
-                DefaultErrorOutput(
-                    message = exception.message ?: "IllegalArgumentException occurred",
                     errorCode = DEFAULT_ERROR_CODE
                 )
             )
