@@ -53,7 +53,7 @@ internal class EntryPointFilterTest {
     }
 
     @Test
-    fun `given a order new queue with wrong format - should throw ServerWebInputException`() {
+    fun `given a average price queue with wrong format - should throw ServerWebInputException`() {
         val body =
             PayloadProvider("/__files/entrypoint/filter/process_input_wrong_format.json")
                 .provideAsString()
@@ -73,7 +73,7 @@ internal class EntryPointFilterTest {
     }
 
     @Test
-    fun `given a order new from controller - should parse successfully`() {
+    fun `given a average price from controller - should parse successfully`() {
         val body =
             PayloadProvider("/__files/entrypoint/filter/process_input_not_queue.json")
                 .provideAsString()
@@ -86,7 +86,7 @@ internal class EntryPointFilterTest {
     }
 
     @Test
-    fun `given a order new from controller with wrong format - should throw ServerWebInputException`() {
+    fun `given a average price from controller with wrong format - should throw ServerWebInputException`() {
 
         val body =
             PayloadProvider("/__files/entrypoint/filter/process_input_wrong_format.json")

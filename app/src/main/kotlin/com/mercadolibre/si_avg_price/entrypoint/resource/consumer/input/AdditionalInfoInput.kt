@@ -1,12 +1,14 @@
 package com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 
 data class AdditionalInfoInput(
-    val CNPJ: String,
-    val STOCK: BigDecimal,
-    val COSTO: BigDecimal,
-    val E_DATLO: LocalDateTime
+    @JsonProperty("CNPJ")
+    val cnpj: String,
+    @JsonProperty("STOCK")
+    val stock: BigDecimal,
+    @JsonProperty("COSTO")
+    val costo: BigDecimal,
 )

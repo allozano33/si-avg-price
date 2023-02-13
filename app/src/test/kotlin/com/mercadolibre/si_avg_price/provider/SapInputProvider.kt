@@ -7,12 +7,12 @@ class SapInputProvider {
 
     companion object {
         fun get() = SapInput(
-            entity = "sap",
+            entity = "CostoyDisponibilidad",
             id = "1234",
             action = "update",
-            date = LocalDateTime.now(),
-            sap_message_id = "12314123",
-            additional_info = AdditionalInfoInputProvider.get()
+            date = LocalDateTime.of(2023,1,1,0,0),
+            sapMessageId = "42010a5502281edda9c91f2c1066452f",
+            additionalInfo = AdditionalInfoInputProvider.get()
         )
     }
 }
