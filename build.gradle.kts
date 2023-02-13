@@ -89,7 +89,7 @@ tasks {
 				"**/com/mercadolibre/si_avg_price/repository/**",
 				"**/com/mercadolibre/si_avg_price/exception/**",
 				"**/com/mercadolibre/si_avg_price/entity/**",
-				"**/com/mercadolibre/si_avg_price/gateway/metric**"
+				"**/com/mercadolibre/si_avg_price/gateway/metric/**"
 			)
 
 			val coverageParticipants = classDirectories.files
