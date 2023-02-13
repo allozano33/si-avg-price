@@ -1,6 +1,6 @@
 package com.mercadolibre.si_avg_price.facade
 
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
+import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
 import com.mercadolibre.si_avg_price.provider.AveragePriceProcessProvider

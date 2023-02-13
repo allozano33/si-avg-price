@@ -1,4 +1,4 @@
-package com.mercadolibre.si_avg_price.gateway
+package com.mercadolibre.si_avg_price.gateway.metric
 
 interface DatadogGateway {
 

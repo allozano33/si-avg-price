@@ -1,7 +1,6 @@
 package com.mercadolibre.si_avg_price.gateway.metric
 
 import com.mercadolibre.metrics.MetricCollector
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.slot

@@ -3,7 +3,7 @@ package com.mercadolibre.si_avg_price.entrypoint.filter
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolibre.si_avg_price.config.ObjectMapperConfig
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input.SapInput
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
+import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.model.datadog.MetricName
 import com.mercadolibre.si_avg_price.provider.PayloadProvider
 import com.mercadolibre.si_avg_price.provider.SapInputProvider

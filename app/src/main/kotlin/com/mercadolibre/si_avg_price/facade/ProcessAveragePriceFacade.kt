@@ -1,7 +1,7 @@
 package com.mercadolibre.si_avg_price.facade
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
+import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess

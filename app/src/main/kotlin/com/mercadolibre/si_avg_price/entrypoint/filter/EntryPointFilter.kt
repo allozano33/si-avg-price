@@ -3,7 +3,7 @@ package com.mercadolibre.si_avg_price.entrypoint.filter
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
+import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.model.datadog.MetricName
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

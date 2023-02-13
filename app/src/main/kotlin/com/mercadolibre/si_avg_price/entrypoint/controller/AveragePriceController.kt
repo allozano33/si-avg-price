@@ -1,7 +1,6 @@
 package com.mercadolibre.si_avg_price.entrypoint.controller
 
 import com.mercadolibre.si_avg_price.facade.ProcessAveragePriceFacade
-import com.mercadolibre.si_avg_price.gateway.DatadogGateway
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
