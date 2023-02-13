@@ -1,3 +1,1 @@
-FROM hub.furycloud.io/mercadolibre/java:1.11-mini
-
-ENV SCOPE="test"
+FROM hub.furycloud.io/mercadolibre/java:17-mini
