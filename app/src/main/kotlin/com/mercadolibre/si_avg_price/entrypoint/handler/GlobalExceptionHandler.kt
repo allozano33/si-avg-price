@@ -1,7 +1,11 @@
 package com.mercadolibre.si_avg_price.entrypoint.handler
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.handler.DefaultErrorOutput
-import com.mercadolibre.si_avg_price.exception.*
+import com.mercadolibre.si_avg_price.exception.AlreadyExecutedException
+import com.mercadolibre.si_avg_price.exception.BusinessException
+import com.mercadolibre.si_avg_price.exception.ImplementationNotExistException
+import com.mercadolibre.si_avg_price.exception.IntegrationClientErrorException
+import com.mercadolibre.si_avg_price.exception.IntegrationServerErrorException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
@@ -80,6 +84,7 @@ class GlobalExceptionHandler {
             .ok()
             .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
     }
+
 
     @ResponseBody
     @ExceptionHandler(BusinessException::class)
