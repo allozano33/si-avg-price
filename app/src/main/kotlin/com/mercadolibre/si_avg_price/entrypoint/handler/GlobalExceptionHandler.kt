@@ -19,9 +19,7 @@ import org.springframework.web.server.ServerWebInputException
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class GlobalExceptionHandler(
-    private val newRelicErrorHandler: NewRelicErrorHandler
-) {
+class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(IntegrationClientErrorException::class)
@@ -30,8 +28,6 @@ class GlobalExceptionHandler(
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
         logger.error(exception.message, exception)
-
-        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .unprocessableEntity()
@@ -47,8 +43,6 @@ class GlobalExceptionHandler(
 
         logger.error(exception.message, exception)
 
-        newRelicErrorHandler.handle(request, exception)
-
         return ResponseEntity
             .internalServerError()
             .body(DefaultErrorOutput(message = exception.message, errorCode = exception.code))
@@ -62,8 +56,6 @@ class GlobalExceptionHandler(
     ): ResponseEntity<DefaultErrorOutput> {
 
         logger.error(exception.message, exception)
-
-        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .ok()
@@ -79,8 +71,6 @@ class GlobalExceptionHandler(
 
         logger.error(exception.message, exception)
 
-        newRelicErrorHandler.handle(request, exception)
-
         return ResponseEntity
             .ok()
             .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
@@ -95,8 +85,6 @@ class GlobalExceptionHandler(
 
         logger.error(exception.message, exception)
 
-        newRelicErrorHandler.handle(request, exception)
-
         return ResponseEntity
             .unprocessableEntity()
             .body(DefaultErrorOutput(message = exception.message, errorCode = DEFAULT_ERROR_CODE))
@@ -110,8 +98,6 @@ class GlobalExceptionHandler(
     ): ResponseEntity<DefaultErrorOutput> {
 
         logger.error("occurred an error not expected ", exception)
-
-        newRelicErrorHandler.handle(request, exception)
 
         return ResponseEntity
             .internalServerError()

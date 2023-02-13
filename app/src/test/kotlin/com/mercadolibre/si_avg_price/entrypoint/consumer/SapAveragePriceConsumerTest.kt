@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolibre.lockclient.Lock
 import com.mercadolibre.si_avg_price.config.IntegrationTest
 import com.mercadolibre.si_avg_price.entrypoint.filter.EntryPointFilter
-import com.mercadolibre.si_avg_price.entrypoint.handler.NewRelicErrorHandler
 import com.mercadolibre.si_avg_price.entrypoint.resource.BQMessage
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input.SapInput
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
@@ -21,7 +20,8 @@ import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ServerWebInputException
 
 @WebFluxTest(SapAveragePriceConsumer::class)
 internal class SapAveragePriceConsumerTest : IntegrationTest() {
@@ -38,8 +38,6 @@ internal class SapAveragePriceConsumerTest : IntegrationTest() {
     @MockkBean
     private lateinit var lockService: LockService
 
-    @MockBean
-    lateinit var newRelicErrorHandler: NewRelicErrorHandler
 
     @MockK
     private lateinit var lock: Lock
@@ -66,6 +64,29 @@ internal class SapAveragePriceConsumerTest : IntegrationTest() {
             .expectBody()
             .json(loadJsonAsString("src/test/resources/__files/entrypoint/consumer/consumer_will_be_process.json"))
     }
+
+    @Test
+    fun `given a input - should return exception`() {
+
+        val input = SapInputProvider.get()
+        val msg = objectMapper.writeValueAsString(BQMessage(input))
+        val sapOutput = SapOutputProvider.get()
+
+        coEvery {
+            entryPointFilter.readMessage(msg, SapInput::class.java)
+        } throws ServerWebInputException("error during body parsing")
+
+        coEvery { lockService.lock(any()) } returns lock
+        coJustRun { lockService.unlock(any()) }
+
+        processFacadeMock(input.toDomain(), sapOutput)
+
+        webClientPost(BQMessage(input))
+            .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+            .expectBody()
+            .json(loadJsonAsString("src/test/resources/__files/entrypoint/consumer/consumer_json_parsing_exception.json"))
+    }
+
 
     private fun webClientPost(input: BQMessage<SapInput>) =
         webTestClient.post()
