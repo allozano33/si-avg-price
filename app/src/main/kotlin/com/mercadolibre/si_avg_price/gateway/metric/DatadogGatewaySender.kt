@@ -13,13 +13,13 @@ class DatadogGatewaySender(
         val tags = MetricCollector.Tags()
         extraTags?.map { tags.add(it.key, it.value) }
 
-        collector.incrementCounter("si_provision_assembler.$name", tags)
+        collector.incrementCounter("si_avg_price.$name", tags)
     }
 
     override fun gauge(key: String, value: Long, extraTags: Map<String, String>?) {
         val tags = MetricCollector.Tags()
         extraTags?.forEach { tag -> tags.add(tag.key, tag.value) }
 
-        collector.gauge("si_provision_assembler.$key", value, tags)
+        collector.gauge("si_avg_price.$key", value, tags)
     }
 }

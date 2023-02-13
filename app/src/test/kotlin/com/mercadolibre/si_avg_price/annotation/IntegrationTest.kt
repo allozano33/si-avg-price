@@ -1,4 +1,4 @@
-package com.mercadolibre.si_provision_assembler.annotation
+package com.mercadolibre.si_avg_price.annotation
 
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest

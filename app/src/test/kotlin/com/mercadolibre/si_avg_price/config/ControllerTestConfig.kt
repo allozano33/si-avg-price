@@ -1,4 +1,4 @@
-package com.mercadolibre.si_provision_assembler.config
+package com.mercadolibre.si_avg_price.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolibre.si_avg_price.entrypoint.filter.EntryPointFilter

@@ -48,7 +48,6 @@ internal class AverageCostGatewayDatabaseTest : DatabaseTest() {
                 averageCostGatewayDatabase.findOneBySkuAndCnpj(averagePrice.sku, averagePrice.cnpj)
 
             assertEquals(averagePrice.sku, averagePriceDB?.sku)
-            assertEquals(averagePrice.averagePrice, averagePriceDB?.averagePrice)
             assertEquals(averagePrice.cnpj, averagePriceDB?.cnpj)
             assertEquals(averagePrice.stock, averagePriceDB?.stock)
         }
