@@ -36,7 +36,7 @@ class DatadogGatewaySenderTest {
             )
         )
 
-        verify(exactly = 1) { collector.incrementCounter(eq("si_provision_assembler.error_parsing"), capture(captor)) }
+        verify(exactly = 1) { collector.incrementCounter(eq("si_avg_price.error_parsing"), capture(captor)) }
 
         val tags = captor.captured.toArray()
 
@@ -61,7 +61,7 @@ class DatadogGatewaySenderTest {
             )
         )
 
-        verify(exactly = 1) { collector.gauge(eq("si_provision_assembler.key"), eq(1), capture(captor)) }
+        verify(exactly = 1) { collector.gauge(eq("si_avg_price.key"), eq(1), capture(captor)) }
 
         val tags = captor.captured.toArray()
 
