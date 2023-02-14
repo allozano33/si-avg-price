@@ -6,5 +6,6 @@ CREATE TABLE average_price (
     stock bigint(20)  NOT NULL,
     created_at  datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  datetime,
+    PRIMARY KEY(id),
     INDEX(cnpj, sku)
 ) ENGINE=InnoDB;
