@@ -1,0 +1,15 @@
+{
+  "msg": {
+    "entity": "CostoyDisponibilidad",
+    "id": "1234",
+    "action": "update",
+    "date": "2023-01-01T00:00:00 ",
+    "sap_message_id": "42010a5502281edda9c91f2c1066452f",
+    "additional_info": {
+      "CNPJ": "1234",
+      "STOCK": 10,
+      "COSTO": 10,
+      "E_DATLO": 20230201
+    }
+  }
+}

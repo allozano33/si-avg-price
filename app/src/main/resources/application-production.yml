@@ -1,0 +1,23 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:mysql://${DB_MYSQL_SIAVGPRICE00_SIAVGPRPRD_SIAVGPRPRD_ENDPOINT}/siavgprprd
+    username: siavgprprd_WPROD
+    password: ${DB_MYSQL_SIAVGPRICE00_SIAVGPRPRD_SIAVGPRPRD_WPROD}
+
+api:
+  internal:
+    base-uri: http://internal.mercadolibre.com/
+    client-id: 572157570249568
+
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client: INFO
+
+topic:
+  sap: ${BIGQUEUE_TOPIC_SAP_PRD_TOPIC_NAME}
+
+fury-lock:
+  namespace: sap-feed-prod

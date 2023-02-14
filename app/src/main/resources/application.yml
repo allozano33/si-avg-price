@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: si-avg-price
+
+logging:
+  level:
+    org:
+      springframework:
+        r2dbc: DEBUG
+    reactor:
+      netty:
+        http:
+          client: INFO
+
+api:
+  internal:
+    base-uri: https://internal.mercadolibre.com/
+    client-id: 572157570249568
+
+topic:
+  sap: ${BIGQUEUE_TOPIC_SAP_STG_TOPIC_NAME}
+
+fury-lock:
+  ttl_seconds: 30
+  socket-timeout: 1000
+  max-wait-value: 100
+  connection-timeout: 1000
+  max-connections: 30
+  max-connections-per-route: 30
+  max-retries: 3
+  retry-delay: 250
+  namespace: "sap-feed-stage"
