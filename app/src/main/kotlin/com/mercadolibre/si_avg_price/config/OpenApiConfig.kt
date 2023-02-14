@@ -21,14 +21,13 @@ class OpenApiConfig {
     @Bean
     fun apiInfo(): OpenAPI {
         val contact = Contact()
-            .name("Seller Invoices - Invoices ON")
+            .name("Seller Invoices - Fiscal Operations")
             .url("https://github.com/mercadolibre/fury_si-avg-price")
-            .email("si-invoices-on@mercadolivre.com")
+            .email("si-fo-tax-1p@mercadolivre.com")
 
         val info = Info()
             .title("si-avg-price")
-            .description("API responsável por controlar o fluxo de emissão de documentos fiscais " +
-            "e registrar todos os eventos processados.")
+            .description("API responsável por fornecer dados de preço médio de produtos em estoque.")
             .version("1.0.0")
             .contact(contact)
 

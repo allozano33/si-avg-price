@@ -1,8 +1,8 @@
 spring:
   r2dbc:
-    url: r2dbc:pool:mysql://${DB_MYSQL_DESAENV07_SIPROASSTG_SIPROASSTG_ENDPOINT}/siavpri
-    username: siproasstg_WPROD
-    password: ${DB_MYSQL_DESAENV07_SIPROASSTG_SIPROASSTG_WPROD}
+    url: r2dbc:pool:mysql://${DB_MYSQL_DESAENV08_SIAVGPRSTG_SIAVGPRSTG_ENDPOINT}/siavgprstg
+    username: siavgprstg_WPROD
+    password: ${DB_MYSQL_DESAENV08_SIAVGPRSTG_SIAVGPRSTG_WPROD}
 
 api:
   internal:

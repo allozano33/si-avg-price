@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:pool:mysql://localhost:3372/siavpri
+    url: r2dbc:pool:mysql://localhost:3372/siavgpr
     username: root
     password: 123456
 
