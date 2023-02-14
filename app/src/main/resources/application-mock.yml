@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:mysql://localhost:3372/siavpri
+    username: root
+    password: 123456
+
+api:
+  internal:
+    base-uri: https://internal-api.mercadolibre.com
+    client-id: 572157570249568
+
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client: INFO

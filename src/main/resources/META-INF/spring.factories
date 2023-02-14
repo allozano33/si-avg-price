@@ -1,1 +1,0 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.mercadolibre.si_avg_price.core.ScopeProfileActivationEnvironmentPostProcessor

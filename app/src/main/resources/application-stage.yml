@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:mysql://${DB_MYSQL_DESAENV08_SIAVGPRSTG_SIAVGPRSTG_ENDPOINT}/siavgprstg
+    username: siavgprstg_WPROD
+    password: ${DB_MYSQL_DESAENV08_SIAVGPRSTG_SIAVGPRSTG_WPROD}
+
+api:
+  internal:
+    base-uri: http://internal.mercadolibre.com
+    client-id: 572157570249568
+
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client: INFO
