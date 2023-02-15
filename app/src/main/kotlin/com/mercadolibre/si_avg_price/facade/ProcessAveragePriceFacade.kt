@@ -1,5 +1,6 @@
 package com.mercadolibre.si_avg_price.facade
 
+import com.mercadolibre.restclient.log.LogUtil
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
 import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
@@ -18,6 +19,7 @@ class ProcessAveragePriceFacade(
         averageCostDataBase.findOneBySkuAndCnpj(averagePriceProcess.sku, averagePriceProcess.cnpj)
             .let {
                 averageCostDataBase.save(averagePriceProcess)
+                LogUtil.log.info("average cost save $averagePriceProcess")
                 datadogGateway.incrementMetric(
                     "sap_average_cost", mapOf(
                         Pair("sku", averagePriceProcess.sku),

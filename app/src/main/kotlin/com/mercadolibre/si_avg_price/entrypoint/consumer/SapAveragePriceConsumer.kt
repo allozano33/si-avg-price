@@ -1,5 +1,6 @@
 package com.mercadolibre.si_avg_price.entrypoint.consumer
 
+import com.mercadolibre.restclient.log.LogUtil.log
 import com.mercadolibre.si_avg_price.entrypoint.filter.EntryPointFilter
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input.SapInput
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
@@ -28,7 +29,9 @@ class SapAveragePriceConsumer(
         @RequestBody msg: String
     ): ResponseEntity<SapOutput> {
         return entryPointFilter.readMessage(msg, SapInput::class.java).toDomain().let { sapInput ->
+            log.info("sap message $sapInput")
             lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
+
                 processAveragePriceFacade.execute(sapInput)
             }.let {
                 ResponseEntity.ok().body(it)
