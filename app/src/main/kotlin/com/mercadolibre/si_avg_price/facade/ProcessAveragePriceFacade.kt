@@ -36,7 +36,6 @@ class ProcessAveragePriceFacade(
                         key = "average_price",
                         value = it.averagePrice.longValueExact(),
                         extraTags = mapOf(
-                            Pair("sku", it.sku),
                             Pair("cnpj", it.cnpj)
                         )
                     )

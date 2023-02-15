@@ -88,7 +88,7 @@ internal class ProcessAveragePriceFacadeTest {
                 datadogGateway.gauge(
                     "average_price",
                     averageCostDTO.averagePrice.longValueExact(),
-                    mapOf("sku" to averageCostDTO.sku, "cnpj" to averageCostDTO.cnpj)
+                    mapOf( "cnpj" to averageCostDTO.cnpj)
                 )
             } just runs
 
