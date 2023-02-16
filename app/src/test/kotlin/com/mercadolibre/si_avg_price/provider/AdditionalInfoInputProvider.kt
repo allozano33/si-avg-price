@@ -11,5 +11,11 @@ class AdditionalInfoInputProvider {
             stock = BigDecimal.TEN,
             costo = BigDecimal.TEN
         )
+
+        fun getDontValid() = AdditionalInfoInput(
+            cnpj = null,
+            stock = BigDecimal.TEN,
+            costo = BigDecimal.TEN
+        )
     }
 }

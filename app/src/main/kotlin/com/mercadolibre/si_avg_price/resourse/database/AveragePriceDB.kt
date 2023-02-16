@@ -41,6 +41,7 @@ data class AveragePriceDB(
                 cnpj = averagePriceProcess.cnpj,
                 cost = averagePriceProcess.averagePrice,
                 stock = averagePriceProcess.stock,
+                createdAt = averageCostDTO.createdAt,
                 updatedAt = LocalDateTime.now()
             )
     }
@@ -52,6 +53,8 @@ data class AveragePriceDB(
             cnpj = cnpj,
             averagePrice = cost,
             stock = stock,
+            createdAt = createdAt,
+            updatedAt = updatedAt
         )
 
     override fun getId(): Long = id

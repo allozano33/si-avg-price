@@ -1,7 +1,7 @@
 package com.mercadolibre.si_avg_price.facade
 
-import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
+import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
 import com.mercadolibre.si_avg_price.provider.AveragePriceProcessProvider
 import io.mockk.clearAllMocks
@@ -43,7 +43,7 @@ internal class ProcessAveragePriceFacadeTest {
         runBlocking {
 
             val averagePriceProcess = AveragePriceProcessProvider.get()
-            val averageCostDTO = AverageCostDTOProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get(id = 213)
 
             coEvery {
                 averageCostDataBase.findOneBySkuAndCnpj(
@@ -51,6 +51,39 @@ internal class ProcessAveragePriceFacadeTest {
                     averagePriceProcess.cnpj
                 )
             } returns averageCostDTO
+
+            coEvery {
+                averageCostDataBase.saveAndUpdate(averagePriceProcess, averageCostDTO)
+            } returns averageCostDTO
+
+            coEvery {
+                datadogGateway.incrementMetric(
+                    "sap_average_cost",
+                    mapOf("sku" to averagePriceProcess.sku, "cnpj" to averagePriceProcess.cnpj)
+                )
+            } just runs
+
+            val actionProcessed = processAveragePriceFacade.execute(averagePriceProcess)
+
+            assertEquals(averagePriceProcess.averagePrice, actionProcessed.averageCost)
+            assertEquals(averagePriceProcess.sku, actionProcessed.sku)
+        }
+    }
+
+    @Test
+    fun `given process dont have entity - should call facade process`() {
+
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get()
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns null
 
             coEvery {
                 averageCostDataBase.save(averagePriceProcess)
@@ -88,7 +121,7 @@ internal class ProcessAveragePriceFacadeTest {
                 datadogGateway.gauge(
                     "average_price",
                     averageCostDTO.averagePrice.longValueExact(),
-                    mapOf( "cnpj" to averageCostDTO.cnpj)
+                    mapOf("cnpj" to averageCostDTO.cnpj)
                 )
             } just runs
 

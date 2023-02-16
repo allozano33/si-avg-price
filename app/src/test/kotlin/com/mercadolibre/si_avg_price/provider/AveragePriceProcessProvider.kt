@@ -6,11 +6,16 @@ import java.math.BigDecimal
 class AveragePriceProcessProvider {
 
     companion object {
-        fun get() = AveragePriceProcess(
-            sku = "1234",
-            cnpj = "1234",
-            stock = BigDecimal.TEN,
-            averagePrice = BigDecimal.TEN
+        fun get(
+            sku: String = "1234",
+            cnpj: String = "1234",
+            stock: BigDecimal = BigDecimal.TEN,
+            averagePrice: BigDecimal = BigDecimal.TEN
+        ) = AveragePriceProcess(
+            sku = sku,
+            cnpj = cnpj,
+            stock = stock,
+            averagePrice = averagePrice
         )
     }
 }
