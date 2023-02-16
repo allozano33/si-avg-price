@@ -28,10 +28,10 @@ class SapAveragePriceConsumer(
     suspend fun process(
         @RequestBody msg: String
     ): ResponseEntity<SapOutput> {
+        log.info("sap message $msg")
         return entryPointFilter.readMessage(msg, SapInput::class.java).toDomain().let { sapInput ->
-            log.info("sap message $sapInput")
+            log.info("sap input $sapInput")
             lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
-
                 processAveragePriceFacade.execute(sapInput)
             }.let {
                 ResponseEntity.ok().body(it)
