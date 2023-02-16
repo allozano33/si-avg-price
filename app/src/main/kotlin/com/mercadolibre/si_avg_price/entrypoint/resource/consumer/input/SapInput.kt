@@ -25,8 +25,11 @@ data class SapInput(
     fun toDomain() =
         AveragePriceProcess(
             sku = id,
-            cnpj = additionalInfo.cnpj,
-            stock = additionalInfo.stock,
-            averagePrice = additionalInfo.costo
+            cnpj = additionalInfo.cnpj!!,
+            stock = additionalInfo.stock!!,
+            averagePrice = additionalInfo.costo!!
         )
+
+    fun isValid() =
+        additionalInfo.cnpj != null && additionalInfo.costo != null && additionalInfo.stock != null
 }

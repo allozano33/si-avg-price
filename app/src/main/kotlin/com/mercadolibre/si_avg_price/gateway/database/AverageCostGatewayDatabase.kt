@@ -16,8 +16,21 @@ class AverageCostGatewayDatabase(
     }
 
     override suspend fun save(averagePriceProcess: AveragePriceProcess): AverageCostDTO {
-        return averagePriceRepository.save(AveragePriceDB.of(averagePriceProcess))
+        val entity: AveragePriceDB = AveragePriceDB.of(averagePriceProcess)
+        return averagePriceRepository.save(entity)
             .toDomain()
+    }
+
+    override suspend fun saveAndUpdate(
+        averagePriceProcess: AveragePriceProcess,
+        averageDTO: AverageCostDTO
+    ): AverageCostDTO {
+        return averagePriceRepository.save(
+            AveragePriceDB.saveAndUpdate(
+                averageDTO,
+                averagePriceProcess
+            )
+        ).toDomain()
     }
 
 

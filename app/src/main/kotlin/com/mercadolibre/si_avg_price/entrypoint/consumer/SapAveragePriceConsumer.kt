@@ -29,13 +29,20 @@ class SapAveragePriceConsumer(
         @RequestBody msg: String
     ): ResponseEntity<SapOutput> {
         log.info("sap message $msg")
-        return entryPointFilter.readMessage(msg, SapInput::class.java).toDomain().let { sapInput ->
-            log.info("sap input $sapInput")
-            lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
-                processAveragePriceFacade.execute(sapInput)
-            }.let {
-                ResponseEntity.ok().body(it)
+        return entryPointFilter.readMessage(msg, SapInput::class.java).let {
+            when {
+                it.isValid() -> it.toDomain().let { sapInput ->
+                    log.info("sap input $sapInput")
+                    lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
+                        processAveragePriceFacade.execute(sapInput)
+                    }.let { sapProcess ->
+                        ResponseEntity.ok().body(sapProcess)
+                    }
+                }
+
+                else -> return ResponseEntity.ok().build()
             }
         }
     }
 }
+

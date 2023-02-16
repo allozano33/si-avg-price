@@ -30,10 +30,24 @@ data class AveragePriceDB(
                 createdAt = LocalDateTime.now(),
                 updatedAt = LocalDateTime.now()
             )
+
+        fun saveAndUpdate(
+            averageCostDTO: AverageCostDTO,
+            averagePriceProcess: AveragePriceProcess
+        ) =
+            AveragePriceDB(
+                id = averageCostDTO.id!!,
+                sku = averagePriceProcess.sku,
+                cnpj = averagePriceProcess.cnpj,
+                cost = averagePriceProcess.averagePrice,
+                stock = averagePriceProcess.stock,
+                updatedAt = LocalDateTime.now()
+            )
     }
 
     fun toDomain() =
         AverageCostDTO(
+            id = id,
             sku = sku,
             cnpj = cnpj,
             averagePrice = cost,

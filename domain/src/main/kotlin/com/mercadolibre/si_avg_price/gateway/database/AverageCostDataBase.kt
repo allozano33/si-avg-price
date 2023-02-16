@@ -8,4 +8,8 @@ interface AverageCostDataBase {
     suspend fun findOneBySkuAndCnpj(sku: String, cnpj: String): AverageCostDTO?
 
     suspend fun save(averagePriceProcess: AveragePriceProcess): AverageCostDTO
+    suspend fun saveAndUpdate(
+        averagePriceProcess: AveragePriceProcess,
+        averageDTO: AverageCostDTO
+    ): AverageCostDTO
 }
