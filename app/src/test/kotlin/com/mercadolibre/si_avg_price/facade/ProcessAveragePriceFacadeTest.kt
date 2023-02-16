@@ -101,6 +101,41 @@ internal class ProcessAveragePriceFacadeTest {
             assertEquals(averagePriceProcess.averagePrice, actionProcessed.averageCost)
             assertEquals(averagePriceProcess.sku, actionProcessed.sku)
         }
+
+    }
+
+    @Test
+    fun `given process dto dont valid - should call facade process`() {
+
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get(id = 0)
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns averageCostDTO
+
+            coEvery {
+                averageCostDataBase.save(averagePriceProcess)
+            } returns averageCostDTO
+
+            coEvery {
+                datadogGateway.incrementMetric(
+                    "sap_average_cost",
+                    mapOf("sku" to averagePriceProcess.sku, "cnpj" to averagePriceProcess.cnpj)
+                )
+            } just runs
+
+            val actionProcessed = processAveragePriceFacade.execute(averagePriceProcess)
+
+            assertEquals(averagePriceProcess.averagePrice, actionProcessed.averageCost)
+            assertEquals(averagePriceProcess.sku, actionProcessed.sku)
+        }
+
     }
 
     @Test
