@@ -13,9 +13,9 @@ data class SapInput(
     @JsonProperty("action")
     val action: String,
     @JsonProperty("date")
-    val date: LocalDateTime,
+    val date: LocalDateTime?,
     @JsonProperty("sap_message_id")
-    val sapMessageId: String,
+    val sapMessageId: String?,
     @JsonProperty("additional_info")
     val additionalInfo: AdditionalInfoInput
 
