@@ -13,9 +13,9 @@ data class SapInput(
     @JsonProperty("action")
     val action: String,
     @JsonProperty("date")
-    val date: LocalDateTime,
+    val date: LocalDateTime?,
     @JsonProperty("sap_message_id")
-    val sapMessageId: String,
+    val sapMessageId: String?,
     @JsonProperty("additional_info")
     val additionalInfo: AdditionalInfoInput
 
@@ -25,8 +25,11 @@ data class SapInput(
     fun toDomain() =
         AveragePriceProcess(
             sku = id,
-            cnpj = additionalInfo.cnpj,
-            stock = additionalInfo.stock,
-            averagePrice = additionalInfo.costo
+            cnpj = additionalInfo.cnpj!!,
+            stock = additionalInfo.stock!!,
+            averagePrice = additionalInfo.costo!!
         )
+
+    fun isValid() =
+        additionalInfo.cnpj != null && additionalInfo.costo != null && additionalInfo.stock != null
 }

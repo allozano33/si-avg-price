@@ -19,6 +19,7 @@ class AveragePriceControllerTest : IntegrationTest() {
 
     @Test
     fun `given a cnpj and aku - should return from database successfully`() {
+
         val averageCostDTO = AverageCostDTOProvider.get()
 
         coEvery {
@@ -34,7 +35,7 @@ class AveragePriceControllerTest : IntegrationTest() {
 
     private fun webClientGet() =
         webTestClient.get()
-            .uri("/average-price//$CNPJ/sku/$SKU")
+            .uri("/average-price/$CNPJ/sku/$SKU")
             .exchange()
 
 

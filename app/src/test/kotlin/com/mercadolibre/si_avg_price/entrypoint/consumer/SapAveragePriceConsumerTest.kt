@@ -66,6 +66,22 @@ internal class SapAveragePriceConsumerTest : IntegrationTest() {
     }
 
     @Test
+    fun `given a input dont have valid menssage - should send and return sap output`() {
+
+        val input = SapInputProvider.getDontAdditionalInfo()
+        val msg = objectMapper.writeValueAsString(BQMessage(input))
+
+        coEvery {
+            entryPointFilter.readMessage(msg, SapInput::class.java)
+        } returns input
+
+
+        webClientPost(BQMessage(input))
+            .expectStatus().isOk
+            .expectBody()
+    }
+
+    @Test
     fun `given a input - should return exception`() {
 
         val input = SapInputProvider.get()

@@ -6,9 +6,9 @@ import java.math.BigDecimal
 
 data class AdditionalInfoInput(
     @JsonProperty("CNPJ")
-    val cnpj: String,
+    val cnpj: String? = null,
     @JsonProperty("STOCK")
-    val stock: BigDecimal,
+    val stock: BigDecimal? = null,
     @JsonProperty("COSTO")
-    val costo: BigDecimal,
+    val costo: BigDecimal? = null,
 )
