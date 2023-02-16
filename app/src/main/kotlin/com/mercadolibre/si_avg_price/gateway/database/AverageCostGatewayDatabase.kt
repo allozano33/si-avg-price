@@ -20,5 +20,17 @@ class AverageCostGatewayDatabase(
             .toDomain()
     }
 
+    override suspend fun saveAndUpdate(
+        averagePriceProcess: AveragePriceProcess,
+        averageDTO: AverageCostDTO
+    ): AverageCostDTO {
+        return averagePriceRepository.save(
+            AveragePriceDB.saveAndUpdate(
+                averageDTO,
+                averagePriceProcess
+            )
+        ).toDomain()
+    }
+
 
 }

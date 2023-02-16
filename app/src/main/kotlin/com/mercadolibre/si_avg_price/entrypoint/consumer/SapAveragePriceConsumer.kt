@@ -1,5 +1,6 @@
 package com.mercadolibre.si_avg_price.entrypoint.consumer
 
+import com.mercadolibre.restclient.log.LogUtil.log
 import com.mercadolibre.si_avg_price.entrypoint.filter.EntryPointFilter
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.input.SapInput
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
@@ -27,12 +28,21 @@ class SapAveragePriceConsumer(
     suspend fun process(
         @RequestBody msg: String
     ): ResponseEntity<SapOutput> {
-        return entryPointFilter.readMessage(msg, SapInput::class.java).toDomain().let { sapInput ->
-            lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
-                processAveragePriceFacade.execute(sapInput)
-            }.let {
-                ResponseEntity.ok().body(it)
+        log.info("sap message $msg")
+        return entryPointFilter.readMessage(msg, SapInput::class.java).let {
+            when {
+                it.isValid() -> it.toDomain().let { sapInput ->
+                    log.info("sap input $sapInput")
+                    lockService.executeWithLock("${sapInput.sku}-${sapInput.cnpj}") {
+                        processAveragePriceFacade.execute(sapInput)
+                    }.let { sapProcess ->
+                        ResponseEntity.ok().body(sapProcess)
+                    }
+                }
+
+                else -> return ResponseEntity.ok().build()
             }
         }
     }
 }
+
