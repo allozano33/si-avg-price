@@ -50,7 +50,7 @@ class ProcessAveragePriceFacade(
                     )
                     return it
                 }
-                throw BusinessException("dont have average cost from sku:$sku and cnpj:$cnpj", 10098)
+                throw BusinessException("Dont Have average price", 10098)
             }
 
 }

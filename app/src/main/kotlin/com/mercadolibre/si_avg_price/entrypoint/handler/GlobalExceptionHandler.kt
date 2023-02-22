@@ -2,6 +2,7 @@ package com.mercadolibre.si_avg_price.entrypoint.handler
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.handler.DefaultErrorOutput
 import com.mercadolibre.si_avg_price.exception.AlreadyLockedException
+import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.exception.IntegrationClientErrorException
 import com.mercadolibre.si_avg_price.exception.IntegrationServerErrorException
 import com.mercadolibre.si_avg_price.exception.NotFoundLockedException
@@ -101,6 +102,24 @@ class GlobalExceptionHandler {
 
         return ResponseEntity
             .internalServerError()
+            .body(
+                DefaultErrorOutput(
+                    message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
+                    errorCode = DEFAULT_ERROR_CODE
+                )
+            )
+    }
+
+    @ResponseBody
+    @ExceptionHandler(BusinessException::class)
+    fun businessException(
+        exception: BusinessException
+    ): ResponseEntity<DefaultErrorOutput> {
+
+        logger.error(exception.message)
+
+        return ResponseEntity
+            .ok()
             .body(
                 DefaultErrorOutput(
                     message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
