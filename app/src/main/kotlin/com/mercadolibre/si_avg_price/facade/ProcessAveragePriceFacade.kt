@@ -2,6 +2,7 @@ package com.mercadolibre.si_avg_price.facade
 
 import com.mercadolibre.restclient.log.LogUtil
 import com.mercadolibre.si_avg_price.entrypoint.resource.consumer.output.SapOutput
+import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
@@ -49,7 +50,7 @@ class ProcessAveragePriceFacade(
                     )
                     return it
                 }
-                return null
+                throw BusinessException("dont have average cost from sku:$sku and cnpj:$cnpj", 10098)
             }
 
 }
