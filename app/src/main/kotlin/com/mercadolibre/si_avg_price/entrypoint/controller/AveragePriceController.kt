@@ -16,7 +16,7 @@ class AveragePriceController(
     private val processAveragePriceFacade: ProcessAveragePriceFacade
 ) {
 
-    @GetMapping("/{cnpj}/sku/{sku}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/cnpj/{cnpj}/sku/{sku}", produces = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun get(
         @PathVariable("cnpj") cnpj: String,
         @PathVariable("sku") sku: String
