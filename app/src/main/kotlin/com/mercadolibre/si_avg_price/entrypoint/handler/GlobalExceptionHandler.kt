@@ -119,7 +119,7 @@ class GlobalExceptionHandler {
         logger.error(exception.message)
 
         return ResponseEntity
-            .ok()
+            .unprocessableEntity()
             .body(
                 DefaultErrorOutput(
                     message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
