@@ -50,7 +50,7 @@ class ProcessAveragePriceFacade(
                     )
                     return it
                 }
-                throw BusinessException("Dont Have average price", 10098)
+                throw BusinessException("Dont Have average price", 10373)
             }
 
 }

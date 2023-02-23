@@ -123,7 +123,7 @@ class GlobalExceptionHandler {
             .body(
                 DefaultErrorOutput(
                     message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
-                    errorCode = DEFAULT_ERROR_CODE
+                    errorCode = DONT_HAVE_AVERAGE_COST_ERROR_CODE
                 )
             )
     }
@@ -132,5 +132,6 @@ class GlobalExceptionHandler {
         private val logger: Logger = LoggerFactory.getLogger(this::class.java)
         private val DEFAULT_MESSAGE_EXCEPTION = HttpStatus.INTERNAL_SERVER_ERROR.name
         private const val DEFAULT_ERROR_CODE = 10098
+        private const val DONT_HAVE_AVERAGE_COST_ERROR_CODE = 10373
     }
 }
