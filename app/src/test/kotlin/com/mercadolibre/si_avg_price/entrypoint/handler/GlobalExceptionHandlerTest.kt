@@ -2,6 +2,7 @@ package com.mercadolibre.si_avg_price.entrypoint.handler
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.handler.DefaultErrorOutput
 import com.mercadolibre.si_avg_price.exception.AlreadyLockedException
+import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.exception.IntegrationClientErrorException
 import com.mercadolibre.si_avg_price.exception.IntegrationServerErrorException
 import com.mercadolibre.si_avg_price.exception.NotFoundLockedException
@@ -129,11 +130,29 @@ class GlobalExceptionHandlerTest {
         Assertions.assertEquals(DEFAULT_ERROR_CODE, errorObject.errorCode)
     }
 
+    @Test
+    fun `when occurs Business Exception - should return error`() {
+
+        val e =
+            BusinessException(message = ERROR_MESSAGE, code = DONT_HAVE_AVERAGE_COST_ERROR_CODE)
+
+
+        val error =
+            globalExceptionHandler.businessException(e)
+
+        val errorObject: DefaultErrorOutput = error.body as DefaultErrorOutput
+
+        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), error.statusCodeValue)
+        Assertions.assertEquals("message", errorObject.message)
+        Assertions.assertEquals(DONT_HAVE_AVERAGE_COST_ERROR_CODE, errorObject.errorCode)
+    }
+
     companion object {
         private const val ERROR_MESSAGE = "message"
         private val DEFAULT_MESSAGE_EXCEPTION = HttpStatus.INTERNAL_SERVER_ERROR.name
         private const val DEFAULT_ERROR_CODE = 10098
         private const val UUID = "uuid"
+        private const val DONT_HAVE_AVERAGE_COST_ERROR_CODE = 10373
     }
 
 }

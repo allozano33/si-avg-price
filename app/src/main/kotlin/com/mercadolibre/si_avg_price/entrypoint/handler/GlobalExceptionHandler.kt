@@ -2,6 +2,7 @@ package com.mercadolibre.si_avg_price.entrypoint.handler
 
 import com.mercadolibre.si_avg_price.entrypoint.resource.handler.DefaultErrorOutput
 import com.mercadolibre.si_avg_price.exception.AlreadyLockedException
+import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.exception.IntegrationClientErrorException
 import com.mercadolibre.si_avg_price.exception.IntegrationServerErrorException
 import com.mercadolibre.si_avg_price.exception.NotFoundLockedException
@@ -109,9 +110,28 @@ class GlobalExceptionHandler {
             )
     }
 
+    @ResponseBody
+    @ExceptionHandler(BusinessException::class)
+    fun businessException(
+        exception: BusinessException
+    ): ResponseEntity<DefaultErrorOutput> {
+
+        logger.error(exception.message)
+
+        return ResponseEntity
+            .unprocessableEntity()
+            .body(
+                DefaultErrorOutput(
+                    message = exception.message ?: DEFAULT_MESSAGE_EXCEPTION,
+                    errorCode = DONT_HAVE_AVERAGE_COST_ERROR_CODE
+                )
+            )
+    }
+
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(this::class.java)
         private val DEFAULT_MESSAGE_EXCEPTION = HttpStatus.INTERNAL_SERVER_ERROR.name
         private const val DEFAULT_ERROR_CODE = 10098
+        private const val DONT_HAVE_AVERAGE_COST_ERROR_CODE = 10373
     }
 }

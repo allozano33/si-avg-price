@@ -1,5 +1,6 @@
 package com.mercadolibre.si_avg_price.facade
 
+import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
@@ -13,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -165,6 +167,39 @@ internal class ProcessAveragePriceFacadeTest {
 
             assertEquals(averagePriceProcess.averagePrice, actionProcessed?.averagePrice)
             assertEquals(averagePriceProcess.sku, actionProcessed?.sku)
+        }
+    }
+
+    @Test
+    fun `given process - should call facade get and dont have entity`() {
+
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get()
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns null
+            coEvery {
+                datadogGateway.gauge(
+                    "average_price",
+                    averageCostDTO.averagePrice.longValueExact(),
+                    mapOf("cnpj" to averageCostDTO.cnpj)
+                )
+            } just runs
+
+            assertThrows<BusinessException> {
+                runBlocking {
+                    processAveragePriceFacade.get(
+                        averagePriceProcess.cnpj,
+                        averagePriceProcess.sku
+                    )
+                }
+            }
         }
     }
 
