@@ -35,7 +35,7 @@ class AveragePriceControllerTest : IntegrationTest() {
 
     private fun webClientGet() =
         webTestClient.get()
-            .uri("/average-price/$CNPJ/sku/$SKU")
+            .uri("/average-price/cnpj/$CNPJ/sku/$SKU")
             .exchange()
 
 
