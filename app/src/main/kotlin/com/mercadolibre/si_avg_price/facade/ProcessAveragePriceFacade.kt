@@ -53,4 +53,6 @@ class ProcessAveragePriceFacade(
                 throw BusinessException("Dont Have average price", 10373)
             }
 
+    suspend fun getAll(): List<AverageCostDTO> =
+        averageCostDataBase.findAll()
 }

@@ -4,6 +4,7 @@ import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess
 import com.mercadolibre.si_avg_price.repository.AveragePriceRepository
 import com.mercadolibre.si_avg_price.resourse.database.AveragePriceDB
+import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Component
 
 
@@ -32,5 +33,8 @@ class AverageCostGatewayDatabase(
         ).toDomain()
     }
 
+    override suspend fun findAll(): List<AverageCostDTO> {
+        return averagePriceRepository.findAll().toList().map { it.toDomain() }
+    }
 
 }
