@@ -47,9 +47,10 @@ class ProcessAveragePriceFacade(
             .let {
                 log.warn("find $it")
                 if (it != null && it.stock > BigDecimal.ZERO) {
+                    log.warn("PASS IF $it")
                     datadogGateway.gauge(
                         key = "average_price",
-                        value = it.averagePrice.longValueExact(),
+                        value = it.averagePrice.toLong(),
                         extraTags = mapOf(
                             Pair("cnpj", it.cnpj)
                         )
