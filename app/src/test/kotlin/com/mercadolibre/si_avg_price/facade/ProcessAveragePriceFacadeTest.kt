@@ -157,7 +157,7 @@ internal class ProcessAveragePriceFacadeTest {
             coEvery {
                 datadogGateway.gauge(
                     "average_price",
-                    averageCostDTO.averagePrice.longValueExact(),
+                    averageCostDTO.averagePrice.toLong(),
                     mapOf("cnpj" to averageCostDTO.cnpj)
                 )
             } just runs
@@ -187,7 +187,7 @@ internal class ProcessAveragePriceFacadeTest {
             coEvery {
                 datadogGateway.gauge(
                     "average_price",
-                    averageCostDTO.averagePrice.longValueExact(),
+                    averageCostDTO.averagePrice.toLong(),
                     mapOf("cnpj" to averageCostDTO.cnpj)
                 )
             } just runs
