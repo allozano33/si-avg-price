@@ -44,7 +44,6 @@ class LockService(
                     "Could not lock $resource because occurred a client exception",
                     10098
                 )
-
                 else -> throw it
             }
         }.getOrThrow()
