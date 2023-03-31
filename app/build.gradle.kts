@@ -23,6 +23,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     runtimeOnly("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
+    implementation("org.springframework:spring-webmvc:5.3.26")
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("commons-io:commons-io:2.11.0")
