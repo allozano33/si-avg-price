@@ -92,6 +92,25 @@ internal class AverageCostGatewayDatabaseTest : DatabaseTest() {
             assertEquals(newAveragePrice.stock, averagePriceDBNew?.stock)
         }
     }
+    @Test
+    fun `given aall cnpj and sku - should return a average cost from db`() {
 
+        runBlocking {
+
+            val all: List<AveragePriceDB> = averagePriceRepository.findAll().toList()
+            assertTrue(all.isEmpty())
+
+            val averagePrice = AveragePriceProcessProvider.get()
+
+            averageCostGatewayDatabase.save(averagePrice)
+
+            val averagePriceDB =
+                averageCostGatewayDatabase.findAll()
+
+            assertEquals(averagePrice.sku, averagePriceDB[0].sku)
+            assertEquals(averagePrice.cnpj, averagePriceDB[0].cnpj)
+            assertEquals(averagePrice.stock, averagePriceDB[0].stock)
+        }
+    }
 
 }
