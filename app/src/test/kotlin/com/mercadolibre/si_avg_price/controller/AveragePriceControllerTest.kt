@@ -11,6 +11,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import java.math.BigDecimal
 
 @WebFluxTest(AveragePriceController::class)
 class AveragePriceControllerTest : IntegrationTest() {
@@ -22,7 +23,7 @@ class AveragePriceControllerTest : IntegrationTest() {
     @Test
     fun `given a cnpj and aku - should return from database successfully`() {
 
-        val averageCostDTO = AverageCostDTOProvider.get()
+        val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
 
         coEvery {
             processAveragePriceFacade.get(CNPJ, SKU)
@@ -37,7 +38,7 @@ class AveragePriceControllerTest : IntegrationTest() {
     @Test
     fun `given all average cost - should return from database successfully`() {
 
-        val averageCostDTO = AverageCostDTOProvider.get()
+        val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
 
         coEvery {
             processAveragePriceFacade.getAll()

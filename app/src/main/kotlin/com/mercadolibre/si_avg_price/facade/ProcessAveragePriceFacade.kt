@@ -5,6 +5,9 @@ import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_AVERAGE_COST
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_IN_BASE
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_STOCK
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -33,7 +36,7 @@ class ProcessAveragePriceFacade(
                     else -> averageCostDataBase.save(averagePriceProcess)
 
                 }
-               log.info("average cost save $averagePriceProcess")
+                log.info("average cost save $averagePriceProcess")
                 datadogGateway.incrementMetric(
                     "sap_average_cost", mapOf(
                         Pair("sku", averagePriceProcess.sku),
@@ -45,21 +48,44 @@ class ProcessAveragePriceFacade(
     suspend fun get(cnpj: String, sku: String): AverageCostDTO? =
         averageCostDataBase.findOneBySkuAndCnpj(sku, cnpj)
             .let {
-                log.warn("find $it")
-                if (it != null && it.stock > BigDecimal.ZERO) {
-                    log.warn("PASS IF $it")
-                    datadogGateway.gauge(
-                        key = "average_price",
-                        value = it.averagePrice.toLong(),
-                        extraTags = mapOf(
-                            Pair("cnpj", it.cnpj)
+                if (it == null) {
+                    datadogGateway.incrementMetric(
+                        "average_price_error", mapOf(
+                            Pair("sku", sku),
+                            Pair("cnpj", cnpj),
+                            Pair("status", DONT_HAVE_IN_BASE.name)
                         )
                     )
-                    log.warn("return $it")
-                    return it
+                    throw BusinessException("Dont Have average price in database", 10373)
                 }
-                log.warn("exeption $it")
-                throw BusinessException("Dont Have average price", 10373)
+                if (it.averagePrice == BigDecimal.ZERO) {
+                    datadogGateway.incrementMetric(
+                        "average_price_error", mapOf(
+                            Pair("sku", sku),
+                            Pair("cnpj", cnpj),
+                            Pair("status", DONT_HAVE_AVERAGE_COST.name)
+                        )
+                    )
+                    throw BusinessException("Dont Have average price", 10373)
+                }
+                if (it.stock == BigDecimal.ZERO) {
+                    datadogGateway.incrementMetric(
+                        "average_price_error", mapOf(
+                            Pair("sku", sku),
+                            Pair("cnpj", cnpj),
+                            Pair("status", DONT_HAVE_STOCK.name)
+                        )
+                    )
+                    throw BusinessException("Dont Have stock", 10373)
+                }
+                datadogGateway.gauge(
+                    key = "average_price",
+                    value = it.averagePrice.toLong(),
+                    extraTags = mapOf(
+                        Pair("cnpj", it.cnpj)
+                    )
+                )
+                return it
             }
 
     suspend fun getAll(): List<AverageCostDTO> =

@@ -81,7 +81,9 @@ internal class AverageCostGatewayDatabaseTest : DatabaseTest() {
             val averageCostDTO = AverageCostDTOProvider.get(
                 id = averagePriceDB?.id!!,
                 createdAt = averagePriceDB.createdAt!!,
-                updatedAt = averagePriceDB.updatedAt!!
+                updatedAt = averagePriceDB.updatedAt!!,
+                stock = averagePriceDB.stock,
+                averagePrice = averagePriceDB.averagePrice
             )
             averageCostGatewayDatabase.saveAndUpdate(newAveragePrice, averageCostDTO)
             val averagePriceDBNew =

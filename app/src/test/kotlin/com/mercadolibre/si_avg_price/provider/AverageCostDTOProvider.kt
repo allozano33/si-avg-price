@@ -10,13 +10,15 @@ class AverageCostDTOProvider {
         fun get(
             id: Long? = null,
             createdAt: LocalDateTime? = LocalDateTime.now(),
-            updatedAt: LocalDateTime? = LocalDateTime.now()
+            updatedAt: LocalDateTime? = LocalDateTime.now(),
+            averagePrice : BigDecimal = BigDecimal.TEN,
+            stock : BigDecimal= BigDecimal.TEN
         ) = AverageCostDTO(
             id = id,
             sku = "1234",
             cnpj = "1234",
-            stock = BigDecimal.TEN,
-            averagePrice = BigDecimal.TEN,
+            stock = stock,
+            averagePrice = averagePrice,
             createdAt = createdAt,
             updatedAt = updatedAt
         )
