@@ -8,7 +8,7 @@ class SapInputProvider {
     companion object {
         fun get() = SapInput(
             entity = "CostoyDisponibilidad",
-            id = "1234",
+            id = "000000001234",
             action = "update",
             date = LocalDateTime.of(2023,1,1,0,0),
             sapMessageId = "42010a5502281edda9c91f2c1066452f",
@@ -17,7 +17,7 @@ class SapInputProvider {
 
         fun getDontAdditionalInfo() = SapInput(
             entity = "CostoyDisponibilidad",
-            id = "1234",
+            id = "00000001234",
             action = "update",
             date = LocalDateTime.of(2023,1,1,0,0),
             sapMessageId = "42010a5502281edda9c91f2c1066452f",

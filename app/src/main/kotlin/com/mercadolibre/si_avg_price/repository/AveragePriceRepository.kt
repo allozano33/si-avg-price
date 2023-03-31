@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AveragePriceRepository : CoroutineCrudRepository<AveragePriceDB, Long> {
 
-    @Query("select * from average_price where sku LIKE '%:sku%' and cnpj = :cnpj")
+    @Query("select * from average_price where sku = :sku and cnpj = :cnpj")
     suspend fun findOneBySkuAndCnpj(sku: String, cnpj: String): AveragePriceDB?
 
 }
