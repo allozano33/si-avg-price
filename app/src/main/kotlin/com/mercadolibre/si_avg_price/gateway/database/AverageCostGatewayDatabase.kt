@@ -13,8 +13,6 @@ class AverageCostGatewayDatabase(
     private val averagePriceRepository: AveragePriceRepository
 ) : AverageCostDataBase {
 
-    companion object {
-    }
 
     override suspend fun findOneBySkuAndCnpj(sku: String, cnpj: String): AverageCostDTO? {
         return averagePriceRepository.findOneBySkuAndCnpj(sku, cnpj)?.toDomain()
