@@ -28,7 +28,7 @@ class AveragePriceController(
         @PathVariable("sku") sku: String
     ): ResponseEntity<AverageCostDTO?> =
         ResponseEntity.status(HttpStatus.OK)
-            .body(processAveragePriceFacade.get(cnpj, sku))
+            .body(processAveragePriceFacade.get(cnpj, removeZero(sku)))
 
     @GetMapping("/listAll", produces = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun getAll(): ResponseEntity<List<AverageCostDTO>> =
@@ -56,4 +56,11 @@ class AveragePriceController(
                 )
             )
 
+    private fun removeZero(sku: String): String {
+        var auxSku = sku
+        while (auxSku.toCharArray()[0].toString().equals("0")) {
+            auxSku = auxSku.drop(1)
+        }
+        return auxSku
+    }
 }
