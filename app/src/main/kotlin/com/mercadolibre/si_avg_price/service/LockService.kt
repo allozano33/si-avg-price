@@ -42,9 +42,8 @@ class LockService(
 
                 is LockClientException -> throw IntegrationClientErrorException(
                     "Could not lock $resource because occurred a client exception",
-                    it.code.toInt()
+                    10098
                 )
-
                 else -> throw it
             }
         }.getOrThrow()
