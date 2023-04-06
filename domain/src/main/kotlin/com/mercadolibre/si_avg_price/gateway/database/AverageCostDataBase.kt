@@ -12,4 +12,6 @@ interface AverageCostDataBase {
         averagePriceProcess: AveragePriceProcess,
         averageDTO: AverageCostDTO
     ): AverageCostDTO
+
+    suspend fun findAll(): List<AverageCostDTO>
 }

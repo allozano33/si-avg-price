@@ -3,6 +3,9 @@ package com.mercadolibre.si_avg_price.facade
 import com.mercadolibre.si_avg_price.exception.BusinessException
 import com.mercadolibre.si_avg_price.gateway.database.AverageCostDataBase
 import com.mercadolibre.si_avg_price.gateway.metric.DatadogGateway
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_AVERAGE_COST
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_IN_BASE
+import com.mercadolibre.si_avg_price.model.AveragePriceError.DONT_HAVE_STOCK
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
 import com.mercadolibre.si_avg_price.provider.AveragePriceProcessProvider
 import io.mockk.clearAllMocks
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.math.BigDecimal
 
 @ExtendWith(SpringExtension::class)
 internal class ProcessAveragePriceFacadeTest {
@@ -157,7 +161,7 @@ internal class ProcessAveragePriceFacadeTest {
             coEvery {
                 datadogGateway.gauge(
                     "average_price",
-                    averageCostDTO.averagePrice.longValueExact(),
+                    averageCostDTO.averagePrice.toLong(),
                     mapOf("cnpj" to averageCostDTO.cnpj)
                 )
             } just runs
@@ -171,7 +175,7 @@ internal class ProcessAveragePriceFacadeTest {
     }
 
     @Test
-    fun `given process - should call facade get and dont have entity`() {
+    fun `given process - should call facade get all`() {
 
         runBlocking {
 
@@ -179,16 +183,39 @@ internal class ProcessAveragePriceFacadeTest {
             val averageCostDTO = AverageCostDTOProvider.get()
 
             coEvery {
+                averageCostDataBase.findAll()
+            } returns listOf(averageCostDTO)
+
+            val actionProcessed =
+                processAveragePriceFacade.getAll()
+
+            assertEquals(averagePriceProcess.averagePrice, actionProcessed[0].averagePrice)
+            assertEquals(averagePriceProcess.sku, actionProcessed[0].sku)
+        }
+    }
+
+    @Test
+    fun `given process - should call facade get and dont have average cost`() {
+
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get(averagePrice = BigDecimal.ZERO)
+
+            coEvery {
                 averageCostDataBase.findOneBySkuAndCnpj(
                     averagePriceProcess.sku,
                     averagePriceProcess.cnpj
                 )
-            } returns null
+            } returns averageCostDTO
             coEvery {
-                datadogGateway.gauge(
-                    "average_price",
-                    averageCostDTO.averagePrice.longValueExact(),
-                    mapOf("cnpj" to averageCostDTO.cnpj)
+                datadogGateway.incrementMetric(
+                    "average_price_error",
+                    mapOf(
+                        "sku" to averagePriceProcess.sku,
+                        "cnpj" to averagePriceProcess.cnpj,
+                        "status" to DONT_HAVE_AVERAGE_COST.name
+                    )
                 )
             } just runs
 
@@ -203,5 +230,74 @@ internal class ProcessAveragePriceFacadeTest {
         }
     }
 
+    @Test
+    fun `given process - should call facade get and dont have stock`() {
 
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.ZERO)
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns averageCostDTO
+            coEvery {
+                datadogGateway.incrementMetric(
+                    "average_price_error",
+                    mapOf(
+                        "sku" to averagePriceProcess.sku,
+                        "cnpj" to averagePriceProcess.cnpj,
+                        "status" to DONT_HAVE_STOCK.name
+                    )
+                )
+            } just runs
+
+            assertThrows<BusinessException> {
+                runBlocking {
+                    processAveragePriceFacade.get(
+                        averagePriceProcess.cnpj,
+                        averagePriceProcess.sku
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `given process - should call facade get and dont have in base`() {
+
+        runBlocking {
+
+            val averagePriceProcess = AveragePriceProcessProvider.get()
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns null
+            coEvery {
+                datadogGateway.incrementMetric(
+                    "average_price_error",
+                    mapOf(
+                        "sku" to averagePriceProcess.sku,
+                        "cnpj" to averagePriceProcess.cnpj,
+                        "status" to DONT_HAVE_IN_BASE.name
+                    )
+                )
+            } just runs
+
+            assertThrows<BusinessException> {
+                runBlocking {
+                    processAveragePriceFacade.get(
+                        averagePriceProcess.cnpj,
+                        averagePriceProcess.sku
+                    )
+                }
+            }
+        }
+    }
 }

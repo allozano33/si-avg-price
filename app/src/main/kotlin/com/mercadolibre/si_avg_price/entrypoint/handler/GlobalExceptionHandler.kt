@@ -28,7 +28,7 @@ class GlobalExceptionHandler {
         exception: IntegrationClientErrorException,
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
-        logger.error(exception.message, exception)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .unprocessableEntity()
@@ -42,7 +42,7 @@ class GlobalExceptionHandler {
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
-        logger.error(exception.message, exception)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .internalServerError()
@@ -56,7 +56,7 @@ class GlobalExceptionHandler {
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
-        logger.error(exception.message, exception)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .ok()
@@ -70,7 +70,7 @@ class GlobalExceptionHandler {
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
-        logger.error(exception.message, exception)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .ok()
@@ -84,7 +84,7 @@ class GlobalExceptionHandler {
         request: ServerHttpRequest
     ): ResponseEntity<DefaultErrorOutput> {
 
-        logger.error(exception.message, exception)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .unprocessableEntity()
@@ -116,7 +116,7 @@ class GlobalExceptionHandler {
         exception: BusinessException
     ): ResponseEntity<DefaultErrorOutput> {
 
-        logger.error(exception.message)
+        logger.error("$exception.message", exception)
 
         return ResponseEntity
             .unprocessableEntity()
