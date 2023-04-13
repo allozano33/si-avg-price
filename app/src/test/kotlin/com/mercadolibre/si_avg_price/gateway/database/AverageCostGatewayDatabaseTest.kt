@@ -4,7 +4,7 @@ import com.mercadolibre.si_avg_price.config.DatabaseTest
 import com.mercadolibre.si_avg_price.provider.AverageCostDTOProvider
 import com.mercadolibre.si_avg_price.provider.AveragePriceProcessProvider
 import com.mercadolibre.si_avg_price.repository.AveragePriceRepository
-import com.mercadolibre.si_avg_price.resourse.database.AveragePriceDB
+import com.mercadolibre.si_avg_price.resource.database.AveragePriceDB
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -80,8 +80,8 @@ internal class AverageCostGatewayDatabaseTest : DatabaseTest() {
             )
             val averageCostDTO = AverageCostDTOProvider.get(
                 id = averagePriceDB?.id!!,
-                createdAt = averagePriceDB.createdAt!!,
-                updatedAt = averagePriceDB.updatedAt!!,
+                createdAt = averagePriceDB.createdAt,
+                updatedAt = averagePriceDB.updatedAt,
                 stock = averagePriceDB.stock,
                 averagePrice = averagePriceDB.averagePrice
             )

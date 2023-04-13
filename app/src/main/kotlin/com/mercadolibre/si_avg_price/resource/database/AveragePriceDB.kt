@@ -1,4 +1,4 @@
-package com.mercadolibre.si_avg_price.resourse.database
+package com.mercadolibre.si_avg_price.resource.database
 
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess

@@ -79,6 +79,40 @@ internal class ProcessAveragePriceFacadeTest {
     }
 
     @Test
+    fun `given process - should call facade process message is after`() {
+
+        runBlocking {
+
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now().minusDays(1))
+            val averageCostDTO = AverageCostDTOProvider.get(id = 213)
+
+            coEvery {
+                averageCostDataBase.findOneBySkuAndCnpj(
+                    averagePriceProcess.sku,
+                    averagePriceProcess.cnpj
+                )
+            } returns averageCostDTO
+
+            coEvery {
+                averageCostDataBase.saveAndUpdate(averagePriceProcess, averageCostDTO)
+            } returns averageCostDTO
+
+            coEvery {
+                datadogGateway.incrementMetric(
+                    "sap_average_cost",
+                    mapOf("sku" to averagePriceProcess.sku, "cnpj" to averagePriceProcess.cnpj)
+                )
+            } just runs
+
+            val actionProcessed = processAveragePriceFacade.execute(averagePriceProcess)
+
+            assertEquals(averagePriceProcess.averagePrice, actionProcessed.averageCost)
+            assertEquals(averagePriceProcess.sku, actionProcessed.sku)
+        }
+    }
+
+    @Test
     fun `given process dont have entity - should call facade process`() {
 
         runBlocking {
