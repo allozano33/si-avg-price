@@ -27,12 +27,13 @@ data class SapInput(
             sku = removeZero(id),
             cnpj = additionalInfo.cnpj!!,
             stock = additionalInfo.stock!!,
-            averagePrice = additionalInfo.costo!!
+            averagePrice = additionalInfo.costo!!,
+            dateUpdate = date!!
         )
 
     private fun removeZero(sku: String): String {
         var auxSku = sku
-        while (auxSku.toCharArray()[0].toString().equals("0")) {
+        while (auxSku.toCharArray()[0].toString() == "0") {
             auxSku = auxSku.drop(1)
         }
         return auxSku

@@ -9,8 +9,8 @@ data class AverageCostDTO(
     val cnpj: String,
     val stock: BigDecimal,
     val averagePrice: BigDecimal,
-    val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     fun isValid() = id != null && id > 0L
 }

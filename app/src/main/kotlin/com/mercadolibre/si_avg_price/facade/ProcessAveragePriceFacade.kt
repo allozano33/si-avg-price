@@ -28,7 +28,9 @@ class ProcessAveragePriceFacade(
         averageCostDataBase.findOneBySkuAndCnpj(averagePriceProcess.sku, averagePriceProcess.cnpj)
             .let { averageDTO ->
                 when {
-                    averageDTO != null && averageDTO.isValid() -> averageCostDataBase.saveAndUpdate(
+                    averageDTO != null && averageDTO.isValid() && averagePriceProcess.isNew(
+                        averageDTO.updatedAt
+                    ) -> averageCostDataBase.saveAndUpdate(
                         averagePriceProcess,
                         averageDTO
                     )

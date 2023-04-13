@@ -2,5 +2,6 @@
   "sku": "1234",
   "cnpj": "1234",
   "stock": "10",
-  "average_price": "10"
+  "average_price": "10",
+  "updated_at": "2023-04-13T00:00:00.000000"
 }

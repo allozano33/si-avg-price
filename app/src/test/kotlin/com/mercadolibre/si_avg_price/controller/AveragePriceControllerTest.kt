@@ -12,6 +12,7 @@ import io.mockk.coEvery
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @WebFluxTest(AveragePriceController::class)
 class AveragePriceControllerTest : IntegrationTest() {
@@ -23,7 +24,8 @@ class AveragePriceControllerTest : IntegrationTest() {
     @Test
     fun `given a cnpj and aku - should return from database successfully`() {
 
-        val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
+        val averageCostDTO =
+            AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
 
         coEvery {
             processAveragePriceFacade.get(CNPJ, SKU)
@@ -38,7 +40,8 @@ class AveragePriceControllerTest : IntegrationTest() {
     @Test
     fun `given all average cost - should return from database successfully`() {
 
-        val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
+        val averageCostDTO =
+            AverageCostDTOProvider.get(stock = BigDecimal.TEN, averagePrice = BigDecimal.TEN)
 
         coEvery {
             processAveragePriceFacade.getAll()
@@ -54,7 +57,7 @@ class AveragePriceControllerTest : IntegrationTest() {
     fun `insert cost - should return from database successfully`() {
 
         val sapOutput = SapOutputProvider.get()
-        val averagePriceProcess = AveragePriceProcessProvider.get()
+        val averagePriceProcess = AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.of(2023,4,13,0,0,0,0,))
         coEvery {
             processAveragePriceFacade.execute(averagePriceProcess)
         } returns sapOutput

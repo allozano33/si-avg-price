@@ -21,6 +21,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @ExtendWith(SpringExtension::class)
 internal class ProcessAveragePriceFacadeTest {
@@ -48,7 +49,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now().plusDays(1))
             val averageCostDTO = AverageCostDTOProvider.get(id = 213)
 
             coEvery {
@@ -81,7 +83,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get()
 
             coEvery {
@@ -115,7 +118,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get(id = 0)
 
             coEvery {
@@ -149,7 +153,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get()
 
             coEvery {
@@ -179,7 +184,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get()
 
             coEvery {
@@ -199,7 +205,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get(averagePrice = BigDecimal.ZERO)
 
             coEvery {
@@ -235,7 +242,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
             val averageCostDTO = AverageCostDTOProvider.get(stock = BigDecimal.ZERO)
 
             coEvery {
@@ -271,7 +279,8 @@ internal class ProcessAveragePriceFacadeTest {
 
         runBlocking {
 
-            val averagePriceProcess = AveragePriceProcessProvider.get()
+            val averagePriceProcess =
+                AveragePriceProcessProvider.get(dateUpdate = LocalDateTime.now())
 
             coEvery {
                 averageCostDataBase.findOneBySkuAndCnpj(
