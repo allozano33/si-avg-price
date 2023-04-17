@@ -1,6 +1,6 @@
 package com.mercadolibre.si_avg_price.repository
 
-import com.mercadolibre.si_avg_price.resourse.database.AveragePriceDB
+import com.mercadolibre.si_avg_price.resource.database.AveragePriceDB
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository

@@ -9,8 +9,8 @@ class AverageCostDTOProvider {
     companion object {
         fun get(
             id: Long? = null,
-            createdAt: LocalDateTime? = LocalDateTime.now(),
-            updatedAt: LocalDateTime? = LocalDateTime.now(),
+            createdAt: LocalDateTime = LocalDateTime.now(),
+            updatedAt: LocalDateTime = LocalDateTime.now(),
             averagePrice : BigDecimal = BigDecimal.TEN,
             stock : BigDecimal= BigDecimal.TEN
         ) = AverageCostDTO(
