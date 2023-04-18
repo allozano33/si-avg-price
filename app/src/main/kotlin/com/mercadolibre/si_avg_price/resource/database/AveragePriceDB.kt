@@ -1,4 +1,4 @@
-package com.mercadolibre.si_avg_price.resourse.database
+package com.mercadolibre.si_avg_price.resource.database
 
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess
@@ -16,8 +16,8 @@ data class AveragePriceDB(
     val cnpj: String,
     val cost: BigDecimal,
     val stock: BigDecimal,
-    val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 ) : Persistable<Long> {
 
     companion object {
@@ -28,7 +28,7 @@ data class AveragePriceDB(
                 cost = averagePriceProcess.averagePrice,
                 stock = averagePriceProcess.stock,
                 createdAt = LocalDateTime.now(),
-                updatedAt = LocalDateTime.now()
+                updatedAt = averagePriceProcess.dateUpdate
             )
 
         fun saveAndUpdate(
@@ -42,7 +42,7 @@ data class AveragePriceDB(
                 cost = averagePriceProcess.averagePrice,
                 stock = averagePriceProcess.stock,
                 createdAt = averageCostDTO.createdAt,
-                updatedAt = LocalDateTime.now()
+                updatedAt = averagePriceProcess.dateUpdate
             )
     }
 

@@ -51,7 +51,8 @@ class AveragePriceController(
                         sku = averageCostDTO.sku,
                         cnpj = averageCostDTO.cnpj,
                         stock = averageCostDTO.stock,
-                        averagePrice = averageCostDTO.averagePrice
+                        averagePrice = averageCostDTO.averagePrice,
+                        dateUpdate = averageCostDTO.updatedAt
                     )
                 )
             )

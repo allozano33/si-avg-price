@@ -3,7 +3,7 @@ package com.mercadolibre.si_avg_price.gateway.database
 import com.mercadolibre.si_avg_price.model.AverageCostDTO
 import com.mercadolibre.si_avg_price.model.AveragePriceProcess
 import com.mercadolibre.si_avg_price.repository.AveragePriceRepository
-import com.mercadolibre.si_avg_price.resourse.database.AveragePriceDB
+import com.mercadolibre.si_avg_price.resource.database.AveragePriceDB
 import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Component
 
@@ -27,12 +27,16 @@ class AverageCostGatewayDatabase(
         averagePriceProcess: AveragePriceProcess,
         averageDTO: AverageCostDTO
     ): AverageCostDTO {
-        return averagePriceRepository.save(
-            AveragePriceDB.saveAndUpdate(
-                averageDTO,
-                averagePriceProcess
-            )
-        ).toDomain()
+        return when {
+            averagePriceProcess.isNew(averageDTO.updatedAt) -> averagePriceRepository.save(
+                AveragePriceDB.saveAndUpdate(
+                    averageDTO,
+                    averagePriceProcess
+                )
+            ).toDomain()
+
+            else -> averageDTO
+        }
     }
 
     override suspend fun findAll(): List<AverageCostDTO> {
