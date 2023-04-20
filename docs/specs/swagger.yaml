@@ -1,0 +1,120 @@
+openapi: 3.0.1
+info:
+  title: si-provision-assembler
+  description: API responsável por controlar o fluxo de emissão de documentos fiscais
+    e registrar todos os eventos processados.
+  contact:
+    name: Seller Invoices - Invoices ON
+    url: https://github.com/mercadolibre/fury_si-provision-assembler
+    email: si-invoices-on@mercadolivre.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /jobs/process/unprovision:
+    post:
+      tags:
+        - process-unprovision-job
+      operationId: processUnprovision
+      parameters:
+        - name: $completion
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ContinuationObject'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobInput'
+        required: true
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+  /consumers/process/{site}:
+    post:
+      tags:
+        - process-consumer
+      operationId: process
+      parameters:
+        - name: site
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: $completion
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ContinuationObject'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessOutput'
+  /ping:
+    get:
+      tags:
+        - ping-controller
+      operationId: ping
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    JobInput:
+      type: object
+      properties:
+        executionId:
+          type: string
+        jobName:
+          type: string
+    ContinuationObject:
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/CoroutineContext'
+    CoroutineContext:
+      type: object
+    ProcessOutput:
+      type: object
+      properties:
+        key:
+          type: string
+        documentId:
+          type: integer
+          format: int64
+        actionType:
+          type: string
+        documentType:
+          type: string
+        site:
+          type: string
+        sellerId:
+          type: integer
+          format: int64
+        executedAt:
+          type: string
+          format: date-time
+        wasExecuted:
+          type: boolean
